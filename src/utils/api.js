@@ -7,6 +7,10 @@ axios.interceptors.response.use(success => {
         Message.error({mssage: success.data.msg});
         return;
     }
+    // 如果后端返回数据，就用element插件提示一下信息，不返回就不提示
+    if (success.data.msg){
+        Message.success({message:success.data.msg})
+    }
     return success.data;
 }, error => {
     if (error.response.status == 504 || error.response.status == 404) {
