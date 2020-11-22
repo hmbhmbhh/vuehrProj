@@ -16,8 +16,31 @@
         </el-dropdown>
       </el-header>
       <el-container>
-        <el-aside width="200px">Aside</el-aside>
-        <el-main>Main</el-main>
+        <el-aside width="200px">
+          <!-- select: el的菜单事件 -->
+          <!--  //两种写法，加了router，不必再写@select事件 -->
+          <!-- <el-menu @select="selectMenu">-->
+          <el-menu router>
+            <!--    options.routes：表示router.js中所有的routes        -->
+            <el-submenu index="1" v-for="opt in this.$router.options.routes" :key="opt.id" v-if="!opt.hidden">
+              <template slot="title">
+                <i class="el-icon-location"></i>
+                <span>导航一</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item v-for="chilies in opt.children" :key="chilies.id" :index="chilies.path">
+                  {{ chilies.name }}
+                </el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+
+          </el-menu>
+        </el-aside>
+        <el-main>
+          <!-- 这里需要去配置菜单在右面显示，加上下面的标签去router.js配置添加children属性即可，
+          先来这里找<router-view/>,如果有，现在这进行跳转 -->
+          <router-view/>
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -54,6 +77,11 @@ export default {
         });
       }
     }
+    //两种写法，加了router，不必再写@select事件
+    // },
+    // selectMenu(index) {
+    //   this.$router.push(index)
+    // }
   }
 }
 </script>
@@ -78,13 +106,15 @@ export default {
   /*设置手指样式*/
   cursor: pointer;
 }
-.el-dropdown-link img{
+
+.el-dropdown-link img {
   width: 48px;
   height: 48px;
   border-radius: 24px;
   margin-left: 8px;
 }
-.el-dropdown-link{
+
+.el-dropdown-link {
   display: flex;
   align-items: center;
 }
